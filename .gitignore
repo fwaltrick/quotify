@@ -1,0 +1,96 @@
+# ==================================
+#       Global / Workspace
+# ==================================
+# Ignora todas as pastas node_modules em qualquer subdiretório
+**/node_modules
+
+# OS
+.DS_Store
+
+# IDEs and editors (geral)
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Banco de dados local
+*.sqlite
+*.sqlite3
+database.sqlite
+
+# ==================================
+#       Backend (NestJS)
+# ==================================
+# Compiled output
+awd_quotes-backend/dist
+awd_quotes-backend/build
+
+# Logs
+awd_quotes-backend/logs
+awd_quotes-backend/*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Tests
+awd_quotes-backend/coverage
+awd_quotes-backend/.nyc_output
+
+# IDE - VSCode
+awd_quotes-backend/.vscode/*
+!awd_quotes-backend/.vscode/settings.json
+!awd_quotes-backend/.vscode/tasks.json
+!awd_quotes-backend/.vscode/launch.json
+!awd_quotes-backend/.vscode/extensions.json
+
+# dotenv environment variable files
+awd_quotes-backend/.env
+awd_quotes-backend/.env.development.local
+awd_quotes-backend/.env.test.local
+awd_quotes-backend/.env.production.local
+awd_quotes-backend/.env.local
+
+# Temp directory
+awd_quotes-backend/.temp
+awd_quotes-backend/.tmp
+
+# Runtime data
+awd_quotes-backend/pids
+awd_quotes-backend/*.pid
+awd_quotes-backend/*.seed
+awd_quotes-backend/*.pid.lock
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# ==================================
+#       Frontend (Vite + React)
+# ==================================
+
+# Build output
+awd_quotes-frontend/dist
+awd_quotes-frontend/.vite
+
+# Logs
+awd_quotes-frontend/logs
+awd_quotes-frontend/*.log
+
+# IDE - VSCode
+awd_quotes-frontend/.vscode/*
+!awd_quotes-frontend/.vscode/settings.json
+!awd_quotes-frontend/.vscode/tasks.json
+!awd_quotes-frontend/.vscode/launch.json
+!awd_quotes-frontend/.vscode/extensions.json
+
+# dotenv environment variable files
+awd_quotes-frontend/.env
+awd_quotes-frontend/.env.local
+awd_quotes-frontend/.env.*.local
+
+# Test coverage
+awd_quotes-frontend/coverage

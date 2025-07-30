@@ -1,0 +1,74 @@
+@import 'tailwindcss';
+
+body {
+  /* background: linear-gradient(135deg, #f7e9b7 0%, #eae2b7 50%, #fcbe49 100%); */
+  background-color: #eae2b7;
+}
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('https://anima-uploads.s3.amazonaws.com/projects/61b61cc6cfcdbd22d938d4d0/fonts/switzer-regular.otf')
+    format('opentype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('https://anima-uploads.s3.amazonaws.com/projects/668e433023f58dc4ab60c309/fonts/switzer-medium.otf')
+    format('opentype');
+  font-weight: 600; /* Semibold */
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('https://anima-uploads.s3.amazonaws.com/projects/6294dfadf39067ae8507fb54/fonts/switzer-bold.otf')
+    format('opentype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('https://anima-uploads.s3.amazonaws.com/projects/67ac8738aaf402b5472decb8/fonts/switzer-extrabold.woff')
+    format('woff');
+  font-weight: 800;
+}
+
+.logo-svg {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+}
+
+/* public/css/style.css */
+
+/* ... (mantenha os @import e a regra do body no topo) ... */
+
+/* ======================================================= */
+/*      Classes Personalizadas para as Formas de Fundo     */
+/* ======================================================= */
+
+/* Propriedades compartilhadas por ambas as formas */
+.background-shape {
+  position: absolute;
+  z-index: 0; /* Fica atrás do conteúdo (que terá z-10) */
+  pointer-events: none; /* Garante que não interfira com cliques */
+}
+
+/* Forma da Esquerda */
+.shape-left {
+  /* Tamanho responsivo */
+  width: 25vw;
+  max-width: 800px; /* Impede que fique gigante em telas muito grandes */
+
+  /* Posição relativa */
+  top: 0%;
+  left: 0;
+}
+
+/* Forma da Direita */
+.shape-right {
+  /* Tamanho responsivo */
+  width: 22vw;
+  max-width: 500px;
+
+  /* Posição relativa */
+  bottom: 0;
+  right: 0;
+}
