@@ -1,10 +1,10 @@
-// src/App.tsx
 import { useState, useEffect } from 'react'
 import type { Quote } from './services/api.service'
 import {
-  fetchAllQuotes,
   fetchRandomQuote,
   fetchQuotesByAuthor,
+  fetchAllAuthors,
+  fetchQuotesPage,
 } from './services/api.service'
 
 import { BackgroundShapes } from './components/BackgroundShapes'
@@ -14,6 +14,7 @@ import { BottomSegmentedNav } from './components/BottomSegmentedNav'
 import { SearchInput } from './components/SearchInput'
 import { AllQuotesGrid } from './components/AllQuotesGrid'
 import { AuthorQuotesView } from './components/AuthorQuotesView'
+import { Pagination } from './components/Pagination'
 
 function App() {
   const [quote, setQuote] = useState<Quote | null>(null)
@@ -22,28 +23,24 @@ function App() {
   const [selectedSegment, setSelectedSegment] = useState<'inspire' | 'all'>(
     'inspire',
   )
-  const [allQuotes, setAllQuotes] = useState<Quote[]>([])
   const [selectedAuthor, setSelectedAuthor] = useState<string | null>(null)
   const [authorQuotes, setAuthorQuotes] = useState<Quote[] | null>(null)
   const [authorLoading, setAuthorLoading] = useState(false)
+  // PAGINATION STATES
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageQuotes, setPageQuotes] = useState<Quote[]>([])
+  const [totalPages, setTotalPages] = useState(1)
+  const PAGE_SIZE = 20
 
   // Fetch all initial data
   useEffect(() => {
     const loadInitialData = async () => {
       setIsLoading(true)
       try {
-        const allQuotes = await fetchAllQuotes()
-        setAllQuotes(allQuotes)
-        // Extrai autores únicos
-        const authors = [...new Set(allQuotes.map((q) => q.author))]
+        const authors = await fetchAllAuthors()
         setAllAuthors(authors)
-
-        // Defines the initial quote
-        const initialQuote = allQuotes.find(
-          (q) => q.author === 'Ralph Waldo Emerson',
-        )
-        setQuote(initialQuote || allQuotes[0]) // Fallback for first quote
         setSelectedSegment('inspire')
+        await getQuote(fetchRandomQuote)
       } catch (error) {
         console.error('Failed to load initial data:', error)
       } finally {
@@ -52,6 +49,22 @@ function App() {
     }
     loadInitialData()
   }, [])
+
+  // Load quotes for the current page
+  const loadQuotesPage = async (page: number) => {
+    setIsLoading(true)
+    try {
+      const result = await fetchQuotesPage(page, PAGE_SIZE)
+      setPageQuotes(result.data)
+      setTotalPages(Math.ceil(result.total / result.limit))
+      setCurrentPage(result.page)
+    } catch (error) {
+      console.error('Failed to fetch quotes page:', error)
+      setPageQuotes([])
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const getQuote = async (fetchFn: () => Promise<Quote | Quote[]>) => {
     setIsLoading(true)
@@ -65,10 +78,21 @@ function App() {
     }
   }
 
-  const handleInspireMe = () => {
+  // Garante que o próximo quote não seja igual ao último
+  const handleInspireMe = async () => {
     setSelectedAuthor(null)
     setAuthorQuotes(null)
-    getQuote(fetchRandomQuote)
+    if (!quote) {
+      getQuote(fetchRandomQuote)
+      return
+    }
+    let newQuote = null
+    let attempts = 0
+    do {
+      newQuote = await fetchRandomQuote()
+      attempts++
+    } while (newQuote.id === quote.id && attempts < 10)
+    setQuote(newQuote)
   }
 
   const handleAuthorSelect = async (author: string) => {
@@ -125,7 +149,14 @@ function App() {
             />
           )}
           {!selectedAuthor && selectedSegment === 'all' ? (
-            <AllQuotesGrid quotes={allQuotes} />
+            <div className="w-full flex flex-col items-center">
+              <AllQuotesGrid quotes={pageQuotes} />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={loadQuotesPage}
+              />
+            </div>
           ) : !selectedAuthor && isLoading && !quote ? (
             <p className="text-xl text-gray-700">Finding some wisdom...</p>
           ) : (
@@ -142,6 +173,7 @@ function App() {
               handleInspireMe()
             } else {
               setQuote(null)
+              loadQuotesPage(1)
             }
           }}
         />

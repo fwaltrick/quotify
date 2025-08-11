@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { QuotesModule } from './quotes/quotes.module';
-import { Quote } from './quotes/quotes.entity';
+import { Quote } from './quotes/entity/quotes.entity';
 
 @Module({
   imports: [
@@ -12,8 +12,10 @@ import { Quote } from './quotes/quotes.entity';
       type: 'sqlite',
       database: 'database.sqlite',
       entities: [Quote],
-      synchronize: true,
-      logging: false,
+      synchronize: false,
+      migrations: [__dirname + '/../database/migrations/*.{js,ts}'],
+      migrationsRun: false,
+      logging: ['query', 'error'],
     }),
   ],
   controllers: [AppController],

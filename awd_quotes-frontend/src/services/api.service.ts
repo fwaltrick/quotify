@@ -4,10 +4,17 @@ export interface Quote {
   id: string
   quote: string
   author: string
-  authorSlug: string // O campo para a imagem
+  authorSlug: string
 }
 
-const API_BASE_URL = 'http://localhost:3000' // A URL do seu backend NestJS
+export interface PaginatedResponse<T> {
+  data: T[]
+  total: number
+  page: number
+  limit: number
+}
+
+const API_BASE_URL = 'http://localhost:3000'
 
 export async function fetchRandomQuote(): Promise<Quote> {
   const response = await fetch(`${API_BASE_URL}/quotes/random`)
@@ -27,9 +34,52 @@ export async function fetchQuotesByAuthor(author: string): Promise<Quote[]> {
 }
 
 export async function fetchAllQuotes(): Promise<Quote[]> {
-  const response = await fetch(`${API_BASE_URL}/quotes`)
+  let allQuotes: Quote[] = []
+  let page = 1
+  let hasMore = true
+
+  while (hasMore) {
+    const response = await fetch(
+      `${API_BASE_URL}/quotes?page=${page}&limit=100`,
+    )
+    if (!response.ok) {
+      throw new Error('Failed to fetch all quotes.')
+    }
+
+    const result = await response.json()
+    allQuotes = [...allQuotes, ...result.data]
+
+    // Verifica se há mais páginas
+    hasMore =
+      result.data.length === result.limit && allQuotes.length < result.total
+    page++
+  }
+
+  return allQuotes
+}
+
+export async function fetchQuotesPage(
+  page = 1,
+  limit = 10,
+): Promise<PaginatedResponse<Quote>> {
+  const response = await fetch(
+    `${API_BASE_URL}/quotes?page=${page}&limit=${limit}`,
+  )
   if (!response.ok) {
-    throw new Error('Failed to fetch all quotes.')
+    throw new Error('Failed to fetch quotes page.')
   }
   return response.json()
+}
+
+export async function fetchAllAuthors(): Promise<string[]> {
+  // Busca uma página grande para pegar todos os autores únicos
+  // Se houver muitos autores, você pode implementar um endpoint específico no backend
+  const response = await fetch(`${API_BASE_URL}/quotes?page=1&limit=1000`)
+  if (!response.ok) {
+    throw new Error('Failed to fetch authors.')
+  }
+
+  const result: PaginatedResponse<Quote> = await response.json()
+  const authors = [...new Set(result.data.map((quote: Quote) => quote.author))]
+  return authors
 }

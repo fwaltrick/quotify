@@ -35,7 +35,7 @@ export const BottomSegmentedNav: React.FC<BottomSegmentedNavProps> = ({
         )}
       </motion.div>
       <button
-        className={`relative w-1/2 px-6 py-3 text-base font-semibold flex items-center justify-center gap-2 focus:outline-none transition-colors duration-200 z-10
+        className={`relative w-1/2 px-6 py-3 text-base font-semibold flex items-center justify-center gap-2 focus:outline-none transition-colors duration-200 z-10 cursor-pointer
           ${
             selected === 'inspire'
               ? 'text-white bg-transparent'
@@ -46,6 +46,7 @@ export const BottomSegmentedNav: React.FC<BottomSegmentedNavProps> = ({
           WebkitTapHighlightColor: 'transparent',
           borderRadius: '9999px',
           overflow: 'hidden',
+          cursor: 'pointer',
         }}
         onMouseEnter={(e) => {
           if (selected !== 'inspire')
@@ -75,13 +76,14 @@ export const BottomSegmentedNav: React.FC<BottomSegmentedNavProps> = ({
         Inspire Me
       </button>
       <button
-        className={`relative w-1/2 px-6 py-3 text-base font-semibold flex items-center justify-center gap-2 focus:outline-none transition-colors duration-200 z-10
+        className={`relative w-1/2 px-6 py-3 text-base font-semibold flex items-center justify-center gap-2 focus:outline-none transition-colors duration-200 z-10 cursor-pointer
           ${selected === 'all' ? 'text-white bg-transparent' : 'text-[#1e1e1e]'}
         `}
         style={{
           WebkitTapHighlightColor: 'transparent',
           borderRadius: '9999px',
           overflow: 'hidden',
+          cursor: 'pointer',
         }}
         onMouseEnter={(e) => {
           if (selected !== 'all') e.currentTarget.style.background = '#f74e4e22'

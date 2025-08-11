@@ -18,7 +18,7 @@ export const AuthorQuotesView: React.FC<AuthorQuotesViewProps> = ({
   const imageUrl = `/images/${authorSlug}.png`
 
   return (
-    <div className="w-full max-w-3xl mx-auto flex flex-col items-center gap-8 py-8 px-2">
+    <div className="w-full max-w-3xl mx-auto flex flex-col items-center gap-8 px-2 -mt-16">
       {/* Topo: Foto, círculo rosa e nome do autor em destaque */}
       <div className="flex flex-col items-center gap-2 w-full">
         <div className="relative w-36 h-36 mb-2">
@@ -50,12 +50,14 @@ export const AuthorQuotesView: React.FC<AuthorQuotesViewProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col gap-4 min-h-[120px]"
+            className="bg-neutral-50 rounded-xl shadow-sm border border-neutral-100 p-6 flex flex-col gap-4 min-h-[120px] max-w-[500px]"
           >
             <p className="text-base text-[#1e1e1e] font-medium leading-snug">
               {q.quote}
             </p>
-            <span className="text-[#f74e4e] font-bold text-sm">{q.author}</span>
+            <span className="text-[#f74e4e] font-bold text-sm -mt-2">
+              {q.author}
+            </span>
           </motion.div>
         ))}
       </div>
